@@ -6,10 +6,11 @@ if (!existsSync(TASKS_FILE)) {
 }
 console.log(styleText(["white", "bgGreen"], "TASK TRACKER V1.0\n"));
 const args = process.argv.slice(2);
+const tasks = JSON.parse(readFileSync(TASKS_FILE, "utf-8"));
 const HELP_TEXT = `Task Tracker Help\n\n
 [1] Add Tasks
 Format: task-cli add <description>
-Example: task-cli add Buy Groceries
+Example: task-cli add "Buy Groceries"
 
 [2] List Tasks
 Format: task-cli list <status>
@@ -26,7 +27,7 @@ Example: task-cli mark-done 1
 
 [5] Update Tasks
 Format: task-cli update <id> <description>
-Example: task-cli update 1 Buy Protein
+Example: task-cli update 1 "Buy Protein"
 
 [6] Delete Tasks
 Format: task-cli delete <id>
@@ -34,19 +35,16 @@ Example: task-cli delete 1
 
 Use --help to display this information`;
 const getTasks = (status) => {
-    const tasks = JSON.parse(readFileSync(TASKS_FILE, "utf-8"));
     if (status)
         return tasks.filter((e) => e.status === status);
     return tasks;
 };
 const addTask = (description, status) => {
-    const tasks = JSON.parse(readFileSync(TASKS_FILE, "utf-8"));
     tasks.push({ status, description, createdAt: new Date(), id: tasks.length + 1 });
     writeFileSync(TASKS_FILE, JSON.stringify(tasks));
     return { status, description, createdAt: new Date(), id: tasks.length };
 };
 const updateTask = (id, status, description) => {
-    const tasks = JSON.parse(readFileSync(TASKS_FILE, "utf-8"));
     const task = tasks.find(e => e.id === id);
     if (!task)
         return console.log("No Tasks Found");
@@ -56,7 +54,6 @@ const updateTask = (id, status, description) => {
     return tasks.find(e => e.id === id);
 };
 const deleteTask = (id) => {
-    const tasks = JSON.parse(readFileSync(TASKS_FILE, "utf-8"));
     const task = tasks.find(e => e.id === id);
     if (!task)
         return console.log("No Task found with the ID", id);
@@ -79,7 +76,7 @@ const handleMain = () => {
         if (!args[1]) {
             return console.log(styleText("redBright", "No Task Description Found!"));
         }
-        const task = addTask(args.slice(1).join(" "), "todo");
+        const task = addTask(args[1], "todo");
         console.log(styleText("green", "Task Added:"), task.description, styleText("green", "ID:"), task.id);
     }
     // List Tasks
@@ -144,7 +141,7 @@ const handleMain = () => {
         if (isNaN(Number(args[1]))) {
             return console.log(styleText("redBright", "Invalid Task ID. Task ID must be a number"));
         }
-        const task = updateTask(Number(args[1]), undefined, args.slice(2).join(" "));
+        const task = updateTask(Number(args[1]), undefined, args[2]);
         console.log(styleText("green", "Task Updated:"), task?.description, styleText("green", "ID:"), task?.id);
     }
     else {
