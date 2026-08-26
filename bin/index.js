@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { styleText } from "node:util";
 import { writeFileSync, readFileSync, existsSync } from "node:fs";
 const TASKS_FILE = "./tasks.json";
@@ -110,6 +109,9 @@ const handleMain = () => {
         if (!args[1]) {
             return console.log(styleText("redBright", "No Task ID Found!"));
         }
+        if (isNaN(Number(args[1]))) {
+            return console.log(styleText("redBright", "Invalid Task ID. Task ID must be a number"));
+        }
         const task = updateTask(Number(args[1]), "in-progress");
         console.log(styleText("green", "Task Marked as In Progress:"), task?.description, styleText("green", "ID:"), task?.id);
     }
@@ -117,6 +119,9 @@ const handleMain = () => {
     else if (args[0] === "mark-done") {
         if (!args[1]) {
             return console.log(styleText("redBright", "No Task ID Found!"));
+        }
+        if (isNaN(Number(args[1]))) {
+            return console.log(styleText("redBright", "Invalid Task ID. Task ID must be a number"));
         }
         const task = updateTask(Number(args[1]), "done");
         console.log(styleText("green", "Task Marked as Done:"), task?.description, styleText("green", "ID:"), task?.id);
@@ -126,12 +131,18 @@ const handleMain = () => {
         if (!args[1]) {
             return console.log(styleText("redBright", "No Task ID Found!"));
         }
+        if (isNaN(Number(args[1]))) {
+            return console.log(styleText("redBright", "Invalid Task ID. Task ID must be a number"));
+        }
         deleteTask(Number(args[1]));
     }
     // Edit Tasks
     else if (args[0] === "update") {
         if (!args[1] || !args[2]) {
             return console.log(styleText("redBright", "No Task ID or Description Found"));
+        }
+        if (isNaN(Number(args[1]))) {
+            return console.log(styleText("redBright", "Invalid Task ID. Task ID must be a number"));
         }
         const task = updateTask(Number(args[1]), undefined, args.slice(2).join(" "));
         console.log(styleText("green", "Task Updated:"), task?.description, styleText("green", "ID:"), task?.id);
