@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { styleText } from "node:util";
 import { writeFileSync, readFileSync, existsSync } from "node:fs";
 
