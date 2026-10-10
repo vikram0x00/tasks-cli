@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-	"task-cli": "./bin/index.js"
+    "task-cli": "./bin/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,7 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "@types/node": "^26.3.0",
+    "@types/node": "^26.6.5",
     "ts-node": "^10.9.2",
     "typescript": "^7.0.2"
   }

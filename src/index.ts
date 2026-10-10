@@ -58,7 +58,7 @@ const getTasks = (status?: TaskStatus): Task[] =>{
 }
 
 const addTask = (description: string, status: TaskStatus): Task =>{
-	tasks.push({ status, description, createdAt: new Date(), id: tasks.length + 1 });
+	tasks.push({ status, description, createdAt: new Date(), id: Math.round(Math.random() * 100) % 100 });
 	writeFileSync(TASKS_FILE, JSON.stringify(tasks));
 	return { status, description, createdAt: new Date(), id: tasks.length }
 }
